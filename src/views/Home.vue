@@ -32,7 +32,7 @@
     </div>
 
     <!-- 小广告 -->
-    <div>
+    <div class="h_sieces">
         <div v-for="(item,n) in sieces.data" :key="n" >
             <img :src="item.thumb" alt="">
         </div>
@@ -77,7 +77,7 @@ export default {
         let res = axios.get("/mobile/other/getAdvert?advert_id=48")
         .then((res)=>{
             console.log(res);
-        this.pieces = res.data
+        this.sieces = res.data
         })
     }
   }
@@ -162,5 +162,14 @@ color:rgb(240, 240, 240);
 .subject img{
     width: 2.2rem;
     height: 2.2rem;
+}
+.h_sieces{
+    width: 100%;
+    padding: 0 20px 20px;
+}
+.h_sieces img{
+    height: 100%;
+    width: 100%;
+    border-radius: 0.3rem;
 }
 </style>
