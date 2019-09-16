@@ -14,6 +14,16 @@ Vue.use(Vant);
 
 Vue.config.productionTip = false
 
+Vue.filter("znum",function(value,n){
+  if(value >= 10000){
+    let m = n+1
+    let num = (value/10000).toFixed(m)
+    return num.substring(0,num.indexOf('.')+m) + "万"
+  }else{
+    return value
+  }
+})
+
 new Vue({
   router,
   store,
