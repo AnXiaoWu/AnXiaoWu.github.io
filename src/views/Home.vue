@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="h_search">
+    <div class="h_search" @click="onsearch">
       <div class="h_search_ipt">
         <van-icon name="search" size="1.25rem" color="#f0f0f0" />
         <input class="h_search_input" type="text" readonly placeholder="搜索歌曲/音乐人/歌单" />
@@ -21,25 +21,25 @@
 
     <!-- 菜单 -->
     <div class="subject">
-      <router-link to="/">
+      <router-link to="/classify">
         <div>
           <img src="../assets/icon/fenlei_1.svg" alt />
           <p>分类</p>
         </div>
       </router-link>
-      <router-link to="/">
+      <router-link to="/ranking">
         <div>
           <img src="../assets/icon/paihangbang.svg" alt />
           <p>排行榜</p>
         </div>
       </router-link>
-      <router-link to="/">
+      <router-link to="/musician">
         <div>
           <img src="../assets/icon/huatong.svg" alt />
           <p>音乐人</p>
         </div>
       </router-link>
-      <router-link to="/">
+      <router-link to="/activity">
         <div>
           <img src="../assets/icon/lihua.svg" alt />
           <p>活动</p>
@@ -86,14 +86,25 @@
     <div class="">
       <div class="h_list_title"><van-cell title="热门精选" is-link icon="hot" to="/" size="large"  /></div>
       
-      <div>
-        <ul class="h_">
-          <li></li>
+      <div class="h_boutique">
+        <ul class="boutique">
+          <li class="boutique_img" v-for="(item,n) in boutique.data" :key="n">
+            <img :src="item.img_url" alt="">
+            <div class="boutique_describe">
+              <p class="boutique_describe_p">{{item.title}}</p>
+              <p class="boutique_descrube_num">{{item.songs_num}}首歌曲</p>
+            </div>
+          </li>
         </ul>
       </div>
 
     </div>
 
+  <!-- 为你推荐 -->
+
+  <div>
+
+  </div>
 
 <audio controls src="http://wsaudio.bssdlbig.kugou.com/1909161801/JA7Iguu8-MyB-kXihBzEUw/1568714500/bss/extname/wsaudio/1068624ee910e7ea32bb3c4f155d7c48.mp3" autoplay style="width:100%"></audio>
 <video controls src="http://wsvideo.bssdlbig.kugou.com/1909161716/b4_b3H9WNxoEXZMATJnvPw/1568711817/f004e8f50b5f0e3f482bf00e843006f5.mp4" style="width:100%"></video>
@@ -112,7 +123,8 @@ export default {
     return {
       swipes: "",
       sieces: "",
-      songlist:''
+      songlist:'',
+      boutique:''
     };
   },
   created() {
@@ -120,6 +132,7 @@ export default {
     this.getPiece();
     this.get_home_recommend()
     this.getSonglist()
+    this.getBoutique()
     console.log("初始化了");
   },
   computed: {
@@ -129,10 +142,11 @@ export default {
     ...mapActions(['get_home_recommend']),
    async getSwipe() {
       // http://mobileapi.5sing.kugou.com/other/getAdvert?advert_id=26
-      console.log("轮播图");
-      let res = await axios
+      
+       await axios
         .get("/mobile/other/getAdvert?advert_id=26")
         .then(res => {
+          console.log("轮播图");
           console.log(res);
           this.swipes = res.data;
         })
@@ -141,18 +155,30 @@ export default {
         });
     },
     async getPiece() {
-      console.log("一个图片");
-      let res = await axios.get("/mobile/other/getAdvert?advert_id=48").then(res => {
+      
+      await axios.get("/mobile/other/getAdvert?advert_id=48").then(res => {
+        console.log("一个图片");
         console.log(res);
         this.sieces = res.data;
       });
     },
     async getSonglist(){
-      console.log('推荐歌单');
-      let res = await axios.get("/mobile/go/getRecommendSongList?tag=-1").then((res)=>{
+      await axios.get("/mobile/go/getRecommendSongList?tag=-1").then((res)=>{
+        console.log('推荐歌单');
         console.log(res);
         this.songlist = res.data
       })
+    },
+    async getBoutique(){
+      await axios.get("/mobile/songlist/hotIp?page=1&pageSize=10").then((res)=>{
+        console.log('热门精选');
+        console.log(res)
+        this.boutique = res.data
+    
+      })
+    },
+    onsearch(){
+      this.$router.push({path:'/search'})
     }
   }
 };
@@ -306,5 +332,53 @@ font-weight:700;
 .h_list_title .van-cell{
 font-weight: 700;
 font-size: 1.75rem;
+}
+.h_boutique{
+  position: relative;
+  padding:0 1.25rem;
+
+}
+.boutique{
+  /* background-color: lightseagreen; */
+  display:flex;
+  flex-wrap:nowrap;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  justify-content: space-between;
+}
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+            display: none
+}
+.boutique_img{
+  position: relative;
+  color: #fff;
+}
+.boutique_img img{
+  width: 8.75rem;
+  margin-right: 0.625rem;
+  border-radius: 0.4rem;
+}
+.boutique :last-child img{
+ margin-right: 0;
+}
+.boutique_describe{
+  position: absolute;
+  bottom: 0.625rem;
+  left: 0.625rem;
+}
+.boutique_describe_p{
+  width: 8.75rem;
+  font-size: 0.8rem;
+  padding-right: 1.25rem;
+  font-weight: 700;
+  overflow:hidden;
+  white-space:nowrap; 
+  text-overflow: ellipsis; 
+}
+.boutique_descrube_num{
+  font-size: 0.6875rem;
+  color: #ccc;
 }
 </style>
