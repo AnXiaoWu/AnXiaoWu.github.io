@@ -7,15 +7,15 @@
       <van-icon name="arrow-down" @touchstart="isShow" />
     </div>
     <div class="player_title">
-      <p class="musi_name">歌手-歌曲名称</p>
-      <span>sy-流行</span>
+      <p class="musi_name">{{cplay.singer ? cplay.singr : ''}}-{{cplay.sn ? cplay.sn  : "歌手-歌曲名称"}}</p>
+      <span>{{cplay.sy ? cplay.sy : "流行"}}</span>
     </div>
     <div>
       <div class="musi_singr">
         <div class="musi_photo">
           <img src="http://wsing.bssdl.kugou.com/c4c1752d4fb60c199478b4ba8406c7e1.jpg" alt />
         </div>
-        <p>演唱者</p>
+        <p>{{cplay.playing ? cplay.playing : "演唱"}}</p>
       </div>
     </div>
 
@@ -23,7 +23,7 @@
       <!-- 歌词 -->
       <div class="music_lyric">
         <ul class="music_scroll">
-          <p v-for="(i,n) in 40" :key="n">{{i}}</p>歌词
+          <li>{{cplay ? cplay : "歌词"}}</li>
         </ul>
       </div>
     </div>
@@ -42,17 +42,17 @@
         <div>00:00</div>
       </div>
       <div class="misic_click">
-          <van-button round color="#7232dd01" bind:click="" icon="arrow-left" type="primary" />
-          <van-button round color="#7232dd01" bind:click="play_btn" icon="play" type="primary" />
-          <van-button round color="#7232dd01" bind:click="" icon="arrow" type="primary" />
+          <van-button round color="#7232dd01" @click="play_sbtn" icon="arrow-left" type="primary" />
+          <van-button round color="#7232dd01" @click="play_btn" icon="play" type="primary" />
+          <van-button round color="#7232dd01" @click="play_xbtn" icon="arrow" type="primary" />
       </div>
     </div>
 </div>
 
 
-    <div class="mini-player" v-show="!fullScreen" ></div>
+    <!-- <div class="mini-player" v-show="!fullScreen" ></div> -->
 
-    <audio id="audio"></audio>
+    <audio id="audio"  :src="cplay.src" ></audio>
   </div>
 </template>
 
@@ -67,12 +67,14 @@ export default {
   },
   created() {
    this.bus.$on("click",(ev)=>{
+     console.log("bus 事件")
      this.istrue = true
      console.log(ev)
-   })
+   });
+   console.log('我来了')
   },
   methods: {
-    ...mapGetters(["fullScreen"]),
+    ...mapGetters(["fullScreen",]),
     isShow(ev){
       console.log("触摸事件")
       this.istrue = false;
@@ -81,16 +83,26 @@ export default {
     },
   },
   computed:{
-    ...mapGetters(['playList']),
+    ...mapGetters(['playList',"cplay"]),
       play_btn(){
-          const audio = document.getElementById('audio')
+          const audio = document.getElementById('audio');
           if(!istrue){
               audio.play()
           }else{
               audio.pause()
           }
+      },
+      play_sbtn(){
+
+      },
+      play_xbtn(){
+
       }
-  }
+      
+  },
+  watch: {
+  
+  },
 };
 </script>
 

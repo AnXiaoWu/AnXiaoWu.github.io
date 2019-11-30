@@ -120,7 +120,7 @@
 
   </div>
 
-<audio controls src="http://wsaudio.bssdlbig.kugou.com/1911170501/X7W1z6QKZNen4RLA17bF9A/1574024480/bss/extname/wsaudio/1d9f4026361da7c10059fc6715e64254.mp3" autoplay style="width:100%"></audio>
+
 <!-- <video controls src="http://wsvideo.bssdlbig.kugou.com/1909161716/b4_b3H9WNxoEXZMATJnvPw/1568711817/f004e8f50b5f0e3f482bf00e843006f5.mp4" style="width:100%"></video> -->
 </div>
   </div>

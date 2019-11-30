@@ -40,9 +40,9 @@ const i18n = new VueI18n({
 
 Vue.prototype.bus = bus;
 
-// axios.defaults.baseURL = debug ? '/mobile' : 'http://mobileapi.5sing.kugou.com'
+axios.defaults.baseURL = debug ? '/mobile' : 'http://mobileapi.5sing.kugou.com'
 // axios.defaults.baseURL = debug ? 'http://app.1718m.cn' : '/mobile'
-axios.defaults.baseURL = debug ? '/mobile' : 'http://app.1718m.cn'
+// axios.defaults.baseURL = debug ? '/mobile' : 'http://app.1718m.cn'
 
 // axios.defaults.baseURL = debug ? 'http://mobileapi.5sing.kugou.com' : '/mobile'
 

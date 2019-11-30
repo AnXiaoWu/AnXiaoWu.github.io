@@ -58,7 +58,20 @@ export default {
           lrc:{data:{}},
           url:""
       },
-      muiscList:[]
+      muiscList:[],
+      selPlay:{ //当前音乐的信息
+        singer:"",//歌手
+        playing:"",// 演唱
+        sn:"",//歌名
+        lg:"",//语言
+        si:"",//封面图
+        sw:"",//歌词
+        sy:"",//音乐类型 古典 流行
+        dynamicWords:"",//滚动歌词
+        i:"",//音乐人头像
+        src:"",//歌曲连接
+
+      }
 
     };
   },
@@ -73,7 +86,7 @@ export default {
   methods: {
     ...mapGetters(["fullScreen"]),
 
-    ...mapMutations(["SET_PLAYLIST"]),
+    ...mapMutations(["SET_PLAYLIST","SET_C_PLAY"]),
     ...mapActions(['selectPlay']),
     async getKinglist() {
               await this.$http
@@ -109,26 +122,39 @@ export default {
   aplay(id,sk,n){
       console.log(id+'---'+sk);
       this.bus.$emit("click","false")
-   this.$http.get(`/song/newget?songid=${id}&songtype=${sk}&songfields=ID,SN,SK,SW,SS,ST,SI,CT,M,S,ZQ,WO,ZC,HY,YG,CK,D,RQ,DD,E,R,RC,SG,C,CS,LV,LG,SY,UID,PT,SCSR,SC,KM5&userfields=ID,NN,I&tag=SlideLyric`).then((res)=>{
+      this.$http.get(`/song/newget?songid=${id}&songtype=${sk}&songfields=ID,SN,SK,SW,SS,ST,SI,CT,M,S,ZQ,WO,ZC,HY,YG,CK,D,RQ,DD,E,R,RC,SG,C,CS,LV,LG,SY,UID,PT,SCSR,SC,KM5&userfields=ID,NN,I&tag=SlideLyric`).then((res)=>{
        console.log('歌词');
          console.log(res);
          this.music.lrc = res.data.data
-    
+        this.selPlay.singer=res.data.data.YG//歌手
+        this.selPlay.playing=res.data.data.S // 演唱
+        this.selPlay.sn=res.data.data.SN//歌名
+        this.selPlay.lg=res.data.data.LG//语言
+        this.selPlay.si=res.data.data.SI//封面图
+        this.selPlay.sw=res.data.data.SW//静态歌词
+        this.selPlay.sy=res.data.data.SY//音乐类型 古典 流行
+        this.selPlay.dynamicWords=res.data.data.dynamicWords//滚动歌词
+        this.selPlay.i=res.data.data.user.I//音乐人头像
      })
       
      this.$http.get(`/song/getSongUrl?version=6.6.70&songid=${id}&songtype=${sk}`).then((res)=>{
        console.log('mp3');
          console.log(res);
          this.music.mp3 = res.data.data
-         this.music.url = res.data.data.squrl
-         
+         this.music.url = res.data.data.squrl;
+
+         this.selPlay.src = res.data.data.hqurl ? res.data.data.hqurl : (res.data.data.lqurl ? res.data.data.lqurl : res.data.data.squrl)
         //  console.log(this.muiscList);
-      
+        console.log("music")
+        // console.log(this.music)
+        console.log(this.selPlay)
          this.selectPlay({
-      List:this.muiscList,
+      List:this.selPlay,
       index:n
     })
      })
+
+    //  this.SET_C_PLAY(this.selPlay)
      console.dir(n)
     //  this.$emit('select',id,n)
     

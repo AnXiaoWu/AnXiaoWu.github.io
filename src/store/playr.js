@@ -17,18 +17,21 @@ export default{
         mode:playMode.sequence,
 
         curentIndex:-1,
+
+        cplay:{}
     },
     getters:{
-        singer:state =>state.singer,
-        playing:state=>state.playing,
-        fullScreen:state=>state.fullScreen,
-        playList:state=>state.playList,
-        sequenceList:state=>state.sequenceList,
-        mode:state=>state.mode,
+        singer:state =>state.singer,//歌手
+        playing:state=>state.playing,// 演唱
+        fullScreen:state=>state.fullScreen,// 全屏
+        playList:state=>state.playList,// 列表
+        sequenceList:state=>state.sequenceList, //顺序
+        mode:state=>state.mode,//模式
         curentIndex:state=>state.curentIndex,
         curentSong:state=>{
             return state.playList[state.curentIndex] || {}            
-        }
+        },
+        cplay:state=>state.cplay
 
     },
     mutations:{
@@ -52,12 +55,15 @@ export default{
         },
         SET_CURENT_INDEX(state,index){
             state.curentIndex=index
+        },
+        SET_C_PLAY(state,List){
+            state.cplay=List
         }
 
 
     },
     actions:{
-        selectPlay({commit,state},{List,index}){
+        async selectPlay({commit,state},{List,index}){
             console.log("异步操作")
             console.log(List)
             console.log(index)
@@ -66,6 +72,8 @@ export default{
             commit('SET_CURENT_INDEX',index)
             commit('SET_FULL_SCREEN',true)
             commit('SEt_PLAYING',true)
+            commit("SET_C_PLAY",List)
         }
+
     }
 }
