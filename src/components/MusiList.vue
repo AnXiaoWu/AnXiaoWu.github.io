@@ -1,4 +1,5 @@
 <template>
+<!-- 歌单列表 -->
     <div class="musi_list">
         <ul class="one_ul" >
            <li class="noe_li" v-for="(item,n) in items.data" :key="n">

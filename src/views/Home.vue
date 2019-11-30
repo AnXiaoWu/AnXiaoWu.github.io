@@ -1,11 +1,25 @@
 <template>
   <div>
+    <jz-loading v-show="status == 'loading'"></jz-loading>
+  
+    <jz-fail v-show="status == 'fail'"></jz-fail>
+    <div v-show="status == 'success'">
+
+      <section>
+      <label >切换语言</label>
+    <button @click="langTiggle" @touchstart="langTiggle">{{$t("m.lang")}}</button>
+    </section>
+<!-- 
+    <select name="" id="lang"  >
+      <option v-for="(item,i)in langg" :key="i" :value="item"></option>
+    </select> -->
+
     <div class="h_search" @click="onsearch">
       <div class="h_search_ipt">
         <van-icon name="search" size="1.25rem" color="#f0f0f0" />
         <input class="h_search_input" type="text" readonly placeholder="搜索歌曲/音乐人/歌单" />
       </div>
-      <div class="btn_search">搜索</div>
+      <div class="btn_search">{{$t("m.search")}}</div>
     </div>
 
     <!-- 轮播图 -->
@@ -24,25 +38,25 @@
       <router-link to="/classify">
         <div>
           <img src="../assets/icon/fenlei_1.svg" alt />
-          <p>分类</p>
+          <p>{{$t("m.sort")}}</p>
         </div>
       </router-link>
       <router-link to="/ranking">
         <div>
           <img src="../assets/icon/paihangbang.svg" alt />
-          <p>排行榜</p>
+          <p>{{$t("m.Leaderboard")}}</p>
         </div>
       </router-link>
       <router-link to="/musician">
         <div>
           <img src="../assets/icon/huatong.svg" alt />
-          <p>音乐人</p>
+          <p>{{$t("m.musician")}}</p>
         </div>
       </router-link>
       <router-link to="/activity">
         <div>
           <img src="../assets/icon/lihua.svg" alt />
-          <p>活动</p>
+          <p>{{$t("m.activities")}}</p>
         </div>
       </router-link>
     </div>
@@ -106,25 +120,33 @@
 
   </div>
 
-<audio controls src="http://wsaudio.bssdlbig.kugou.com/1909161801/JA7Iguu8-MyB-kXihBzEUw/1568714500/bss/extname/wsaudio/1068624ee910e7ea32bb3c4f155d7c48.mp3" autoplay style="width:100%"></audio>
-<video controls src="http://wsvideo.bssdlbig.kugou.com/1909161716/b4_b3H9WNxoEXZMATJnvPw/1568711817/f004e8f50b5f0e3f482bf00e843006f5.mp4" style="width:100%"></video>
+<audio controls src="http://wsaudio.bssdlbig.kugou.com/1911170501/X7W1z6QKZNen4RLA17bF9A/1574024480/bss/extname/wsaudio/1d9f4026361da7c10059fc6715e64254.mp3" autoplay style="width:100%"></audio>
+<!-- <video controls src="http://wsvideo.bssdlbig.kugou.com/1909161716/b4_b3H9WNxoEXZMATJnvPw/1568711817/f004e8f50b5f0e3f482bf00e843006f5.mp4" style="width:100%"></video> -->
+</div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import JzLoading from '../components/common/JzLoading'
+import JzFail from '../components/common/JzFail'
+import JzLoadmore from '../components/common/JzLoadmore'
 import MusiList from '../components/MusiList'
+
 import {mapState,mapGetters,mapMutations,mapActions} from "vuex"
 export default {
   components:{
-    MusiList
+    MusiList,JzLoading,JzFail,JzLoadmore
   },
   data() {
     return {
+      status:'loading',// loading success
+      // loading:false,
       swipes: "",
       sieces: "",
       songlist:'',
-      boutique:''
+      boutique:'',
+      langg:[]
     };
   },
   created() {
@@ -140,37 +162,56 @@ export default {
   },
   methods: {
     ...mapActions(['get_home_recommend']),
+    langTiggle(ev){
+      ev.preventDefault()
+     if(localStorage.getItem("lang")==="zh"){
+       this.lang="en";
+       this.$i18n.locale=this.lang;
+     }else{
+       this.lang = "zh";
+       this.$i18n.locale = this.lang
+     }
+     localStorage.setItem("lang",this.lang)
+    },
+    
    async getSwipe() {
       // http://mobileapi.5sing.kugou.com/other/getAdvert?advert_id=26
       
        await axios
-        .get("/mobile/other/getAdvert?advert_id=26")
+        .get("/other/getAdvert?advert_id=26")
         .then(res => {
-          console.log("轮播图");
-          console.log(res);
+          if(res.data.success){
+          this.status ='success';
           this.swipes = res.data;
+          }else{
+            this.status = 'fail'
+          }
+          console.log("轮播图");
+          console.log(this)
+          console.log(res);
         })
         .catch(err => {
           console.log(err);
+          this.status = 'fail'
         });
     },
     async getPiece() {
       
-      await axios.get("/mobile/other/getAdvert?advert_id=48").then(res => {
+      await axios.get("/other/getAdvert?advert_id=48").then(res => {
         console.log("一个图片");
         console.log(res);
         this.sieces = res.data;
       });
     },
     async getSonglist(){
-      await axios.get("/mobile/go/getRecommendSongList?tag=-1").then((res)=>{
+      await axios.get("/go/getRecommendSongList?tag=-1").then((res)=>{
         console.log('推荐歌单');
         console.log(res);
         this.songlist = res.data
       })
     },
     async getBoutique(){
-      await axios.get("/mobile/songlist/hotIp?page=1&pageSize=10").then((res)=>{
+      await axios.get("/songlist/hotIp?page=1&pageSize=10").then((res)=>{
         console.log('热门精选');
         console.log(res)
         this.boutique = res.data
@@ -315,16 +356,31 @@ padding: 1.25rem;
 font-weight:700;
 }
 .recom_list{
+  width: 100%;
   position: absolute;
   bottom: 0.9375rem;
   left: 0.9375rem;
   font-size: 0.875rem;
+
+}
+.recom_list p{
+    width:calc(100% - 1.25rem);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .recom_r_list{
   position: absolute;
+  width: 100%;
   bottom: 0.9375rem;
   left: 1.25rem;
   font-size: 0.75rem;
+}
+.recom_r_list p{
+    width:calc(100% - 1.25rem);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .h_list_title{
   margin-bottom: 10px;
@@ -376,6 +432,7 @@ font-size: 1.75rem;
   overflow:hidden;
   white-space:nowrap; 
   text-overflow: ellipsis; 
+  /* 超出小数点显示 */
 }
 .boutique_descrube_num{
   font-size: 0.6875rem;

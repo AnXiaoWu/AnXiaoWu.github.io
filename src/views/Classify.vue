@@ -1,6 +1,6 @@
 <template>
     <div>
-  <van-nav-bar title="分区"  left-arrow>
+  <van-nav-bar title="分区"  left-arrow @click-left="$router.back()">
   <van-icon name="volume-o" slot="right" />
   </van-nav-bar>
 
@@ -27,7 +27,7 @@ export default {
     },
     methods:{
         async getClassify(){
-            await axios.get('/mobile/song/getstyles').then((res)=>{
+            await axios.get('/song/getstyles').then((res)=>{
                 console.log('分区');
                 console.log(res);
                 this.classify = res.data

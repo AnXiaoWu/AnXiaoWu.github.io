@@ -1,10 +1,10 @@
 <template>
     <div>
       <div class="h_search">
-          <van-icon name="arrow-left" size="1.25rem" color="#f0f0f0" />
+          <van-icon name="arrow-left" size="1.25rem" color="#f0f0f0" @click="$router.back()"  />
       <div class="h_search_ipt">
         <van-icon name="search" size="1.25rem" color="#f0f0f0" />
-        <input class="h_search_input" type="text" placeholder="搜索歌曲/音乐人/歌单" />
+        <input class="h_search_input" type="text" placeholder="搜索歌曲/音乐人/歌单" autofocus />
       </div>
       <div class="btn_search" @click="onsearch">搜索</div>
     </div>
