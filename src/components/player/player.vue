@@ -44,7 +44,7 @@
       </div>
       <div class="misic_click">
           <van-button round color="#7232dd01" @click="play_sbtn" icon="arrow-left" type="primary" />
-          <van-button round color="#7232dd01" @click="play_btn" icon="play" type="primary" />
+          <van-button round color="#7232dd01" @click="play_btn" @touchstart="play_btn" icon="play" type="primary" />
           <van-button round color="#7232dd01" @click="play_xbtn" icon="arrow" type="primary" />
       </div>
     </div>
@@ -99,7 +99,10 @@ export default {
 
       },
       play_btn(){ // 播放/暂停
+      
+      console.log("切换播放暂停")
       this.$nextTick(()=>this.$refs.audio.paused ? this.$refs.audio.play() : this.$refs.audio.paused())
+      
       },
       play_xbtn(){ // 下一首
 
@@ -107,12 +110,7 @@ export default {
       
   },
   watch: {
-    cplay(newVal,oldVal){
-      console.log("监听事件")
-      console.log(newVal)
-      console.log(oldVal)
-
-    }
+   
   },
 };
 </script>

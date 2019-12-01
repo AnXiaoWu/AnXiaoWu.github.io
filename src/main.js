@@ -13,10 +13,13 @@ import VueI18n from "vue-i18n"
 import bus from "./config/bus"
 // import buildConfig from './config/build.config'
 // import filter from "./config/filters"
+import { Toast } from 'vant';
+
+
 Vue.use(Vuex)
 Vue.use(Vant);
 Vue.use(VueI18n)
-
+Vue.use(Toast);
 
 
 let debug = process.env.NODE_ENV == 'development'
