@@ -12,7 +12,7 @@ import 'vant/lib/index.css'
 import VueI18n from "vue-i18n"
 import bus from "./config/bus"
 // import buildConfig from './config/build.config'
-
+// import filter from "./config/filters"
 Vue.use(Vuex)
 Vue.use(Vant);
 Vue.use(VueI18n)
@@ -54,6 +54,15 @@ Vue.filter("znum", function (value, n) {
   } else {
     return value
   }
+})
+Vue.filter("arrayk",function(value){
+  for(var i = 0;i < value.length;i++){
+        if(value[i]===undefined){
+          value.splce(i,1)
+          i = i-1
+        }
+      }
+      return value
 })
 
 new Vue({

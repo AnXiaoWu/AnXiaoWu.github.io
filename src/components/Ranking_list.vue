@@ -121,7 +121,7 @@ export default {
   },
   aplay(id,sk,n){
       console.log(id+'---'+sk);
-      this.bus.$emit("click","false")
+      this.bus.$emit("clicks","true")
       this.$http.get(`/song/newget?songid=${id}&songtype=${sk}&songfields=ID,SN,SK,SW,SS,ST,SI,CT,M,S,ZQ,WO,ZC,HY,YG,CK,D,RQ,DD,E,R,RC,SG,C,CS,LV,LG,SY,UID,PT,SCSR,SC,KM5&userfields=ID,NN,I&tag=SlideLyric`).then((res)=>{
        console.log('歌词');
          console.log(res);
@@ -132,7 +132,7 @@ export default {
         this.selPlay.lg=res.data.data.LG//语言
         this.selPlay.si=res.data.data.SI//封面图
         this.selPlay.sw=res.data.data.SW//静态歌词
-        this.selPlay.sy=res.data.data.SY//音乐类型 古典 流行
+        this.selPlay.sy=res.data.data.SY.split("|")//音乐类型 古典 流行
         this.selPlay.dynamicWords=res.data.data.dynamicWords//滚动歌词
         this.selPlay.i=res.data.data.user.I//音乐人头像
      })

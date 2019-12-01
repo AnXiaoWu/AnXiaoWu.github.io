@@ -8,9 +8,10 @@
     </div>
     <div class="player_title">
       <p class="musi_name">{{cplay.singer ? cplay.singr : ''}}-{{cplay.sn ? cplay.sn  : "歌手-歌曲名称"}}</p>
-      <span>{{cplay.sy ? cplay.sy : "流行"}}</span>
+      <span v-for="(cp,i) in cplay.sy" :key="i">{{cp}}</span>
+      <!-- <span>{{cplay.sy ? cplay.sy : "流行"}}</span> -->
     </div>
-    <div>
+    <div>----------------------------------------
       <div class="musi_singr">
         <div class="musi_photo">
           <img src="http://wsing.bssdl.kugou.com/c4c1752d4fb60c199478b4ba8406c7e1.jpg" alt />
@@ -52,26 +53,31 @@
 
     <!-- <div class="mini-player" v-show="!fullScreen" ></div> -->
 
-    <audio id="audio"  :src="cplay.src" ></audio>
+    <audio ref="audio" v-show="false"  :src="src" controls autoplay="autoplay"></audio>
   </div>
 </template>
 
 <script>
-import {mapGetters,mapActions} from 'vuex'
+import {mapGetters,mapActions} from 'vuex';
+
 
 export default {
   data() {
     return {
-        istrue:false,
+        istrue:false
     };
   },
   created() {
-   this.bus.$on("click",(ev)=>{
+     this.bus.$on("clicks",(ev)=>{
      console.log("bus 事件")
-     this.istrue = true
+     this.istrue=ev
      console.log(ev)
-   });
+      });
    console.log('我来了')
+
+  },
+  mounted(){
+  
   },
   methods: {
     ...mapGetters(["fullScreen",]),
@@ -79,29 +85,34 @@ export default {
       console.log("触摸事件")
       this.istrue = false;
       ev.preventDefault()
-      
     },
+  
+   
   },
   computed:{
     ...mapGetters(['playList',"cplay"]),
-      play_btn(){
-          const audio = document.getElementById('audio');
-          if(!istrue){
-              audio.play()
-          }else{
-              audio.pause()
-          }
+      src(){
+        console.log("src里面的"+this.cplay.src)
+        return this.cplay.src
       },
-      play_sbtn(){
+      play_sbtn(){ //上一首
 
       },
-      play_xbtn(){
+      play_btn(){ // 播放/暂停
+      this.$nextTick(()=>this.$refs.audio.paused ? this.$refs.audio.play() : this.$refs.audio.paused())
+      },
+      play_xbtn(){ // 下一首
 
       }
       
   },
   watch: {
-  
+    cplay(newVal,oldVal){
+      console.log("监听事件")
+      console.log(newVal)
+      console.log(oldVal)
+
+    }
   },
 };
 </script>
