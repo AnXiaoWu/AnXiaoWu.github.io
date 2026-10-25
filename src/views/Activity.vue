@@ -1,7 +1,9 @@
 <template>
     <div>
           <van-nav-bar title="活动"  left-arrow @click-left="$router.back()">
-  <van-icon name="volume-o" slot="right" />
+  <template #right>
+      <van-icon name="volume-o" />
+    </template>
   </van-nav-bar>
 
 
