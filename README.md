@@ -27,7 +27,24 @@ npm run preview    # 本地预览构建产物
 
 ## 部署
 
-推送到 `master` 分支会自动触发 GitHub Actions：构建 `dist` 并把产物提交回 master 根目录发布（本仓库是用户站点 `AnXiaoWu.github.io`，Pages 源为 master 根目录）。首次启用需到仓库 Settings → Pages → Source 选择 `master branch / (root)`。
+推送到 `master` 分支会自动触发 GitHub Actions：构建 `dist` 并通过官方 artifact 方式部署到 GitHub Pages（Source 需为 `GitHub Actions` 模式）。
+
+### 生产环境接口反代（重要）
+
+线上站点是 https，而 5sing 接口无法被浏览器直连：
+
+- `mobileapi.5sing.kugou.com`：证书为 `*.kugou.com` 通配符，**不匹配多级子域**，浏览器直接报证书错误（`ERR_CERT_COMMON_NAME_INVALID`）
+- `5ssearch.kugou.com`：证书正常，但**不返回 CORS 头**，浏览器拦截跨域响应
+
+因此生产环境必须有一层反代。最简便的免费方案是 Cloudflare Worker，代码已备好：`deploy/cors-proxy-worker.js`，复制到 Cloudflare Workers 部署即可（约 2 分钟，文件头部有详细步骤）。部署完成后把 `.env.production` 的两个地址改成你的 Worker 域名：
+
+```bash
+VITE_API_BASE=https://<worker域名>        # /mobile/* 会被转发到 mobileapi
+VITE_SEARCH_API_BASE=https://<worker域名> # /search-api/* 会被转发到 5ssearch
+```
+
+> 开发环境（`npm run dev`）不受影响，接口走 Vite 本地代理，功能完整。
+> 注意：GitHub Pages 只托管静态文件，无法自身做反向代理，所以这一步绕不开。
 
 ## 目录结构
 
