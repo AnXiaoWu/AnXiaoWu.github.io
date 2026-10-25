@@ -10,11 +10,9 @@
  *   1. 登录 https://dash.cloudflare.com → Workers & Pages → Create Worker
  *   2. 把本文件全部内容粘贴进编辑器，Deploy
  *   3. 记下 Worker 域名，例如 https://xxx.你的子域.workers.dev
- *   4. 在仓库根目录执行（二选一）：
- *      - 直接用 workers.dev 域名：
- *          .env.production 中 VITE_API_BASE=https://<worker域名>
- *                          VITE_SEARCH_API_BASE=https://<worker域名>
- *      - 或给 Worker 绑定自定义子域（如 api.你的域名.com），再用该域名
+ *   4. 在仓库根目录 .env.production 中（注意 baseURL 要带路由前缀，与前端请求路径拼接）：
+ *      VITE_API_BASE=https://<worker域名>/mobile
+ *      VITE_SEARCH_API_BASE=https://<worker域名>/search-api
  *
  * 路由约定（与前端 .env.production 对应）：
  *   <worker>/mobile/xxx      -> http://mobileapi.5sing.kugou.com/xxx
