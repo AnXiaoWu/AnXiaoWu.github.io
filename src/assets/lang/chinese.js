@@ -15,6 +15,8 @@ export const m={
     retry:"重试",
     playCnt:"次播放",
     songsUnit:"首",
+    songs:"首歌",
+    playAll:"播放全部",
     sort:"分类",
     Leaderboard:"排行榜",
     musician:"音乐人",

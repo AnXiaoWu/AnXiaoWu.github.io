@@ -154,7 +154,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { search, getSearchHotWords, getSongListSongs } from '@/api'
+import { search, getSearchHotWords } from '@/api'
 import { znum } from '@/utils/format'
 import HomeSearchBar from '@/components/home/HomeSearchBar.vue'
 
@@ -352,23 +352,16 @@ export default {
       this.selectPlay({ list, index })
     },
 
-    /** 点击歌单：拉取歌单内歌曲直接播放 */
-    async openSonglist(item) {
-      const loading = this.$toast.loading({ duration: 0, forbidClick: true })
-      try {
-        const res = await getSongListSongs(item.songListId)
-        const list = (res.data && res.data.data) || []
-        if (!list.length) {
-          this.$toast.fail(this.$t('m.noResult'))
-          return
-        }
-        this.selectPlay({ list, index: 0 })
-      } catch (e) {
-        console.error('获取歌单歌曲失败', e)
-        this.$toast.fail(this.$t('m.searchFail'))
-      } finally {
-        loading.close()
-      }
+    /** 点击歌单：进入歌单详情页 */
+    openSonglist(item) {
+      this.$router.push({
+        path: '/songlist/' + item.songListId,
+        query: {
+          title: stripTags(item.title),
+          cover: item.pictureUrl,
+          creator: item.userName,
+        },
+      })
     },
 
     /** 点击音乐人：用其昵称作为关键词搜歌曲 */

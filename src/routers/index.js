@@ -8,6 +8,7 @@ const routes = [
   { path: '/musician', component: () => import('@/views/Musician.vue') },
   { path: '/activity', component: () => import('@/views/Activity.vue') },
   { path: '/ranking/:id', component: () => import('@/components/Ranking_list.vue') },
+  { path: '/songlist/:id', component: () => import('@/views/SongListDetail.vue') },
 ]
 
 const router = createRouter({

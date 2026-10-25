@@ -16,6 +16,8 @@ export const m = {
     retry:"Retry",
     playCnt:" plays",
     songsUnit:" songs",
+    songs:" songs",
+    playAll:"Play All",
     sort:"Sort",
     Leaderboard:"Leaderboard",
     musician:"Musician",

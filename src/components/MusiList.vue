@@ -1,20 +1,25 @@
 <template>
   <!-- 歌单列表 -->
-  <div class="musi_list">
-    <ul class="one_ul">
-      <li class="noe_li" v-for="(item, n) in list" :key="n">
-        <div class="noe_li_imgs">
-          <img class="noe_li_img" :src="item.Picture" :alt="item.Title" loading="lazy" />
-          <div class="noe_listen">
-            <van-icon name="service-o" />
-            {{ znum(item.PlayCount, 2) }}
+    <div class="musi_list">
+      <ul class="one_ul">
+        <router-link
+          v-for="(item, n) in list"
+          :key="n"
+          class="noe_li"
+          :to="{ path: '/songlist/' + item.SongListId, query: { title: item.Title, cover: item.Picture, creator: item.user && item.user.NN } }"
+        >
+          <div class="noe_li_imgs">
+            <img class="noe_li_img" :src="item.Picture" :alt="item.Title" loading="lazy" />
+            <div class="noe_listen">
+              <van-icon name="service-o" />
+              {{ znum(item.PlayCount, 2) }}
+            </div>
           </div>
-        </div>
-        <p class="li_title">{{ item.Title }}</p>
-        <p class="li_nn">{{ item.user && item.user.NN }}</p>
-      </li>
-    </ul>
-  </div>
+          <p class="li_title">{{ item.Title }}</p>
+          <p class="li_nn">{{ item.user && item.user.NN }}</p>
+        </router-link>
+      </ul>
+    </div>
 </template>
 
 <script>
@@ -53,6 +58,8 @@ export default {
 .noe_li {
   width: calc(100% / 3 - 0.3125rem);
   margin-bottom: 0.625rem;
+  color: inherit;
+  text-decoration: none;
 }
 .noe_li_imgs {
   position: relative;

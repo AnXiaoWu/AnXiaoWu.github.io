@@ -55,7 +55,7 @@ src/
 
 ## 冒烟测试（可选）
 
-`scripts/smoke-test.mjs` 会用无头浏览器打开各个页面，验证渲染、接口数据与图片加载；`scripts/smoke-player.mjs` 专项测试播放页；`scripts/smoke-search.mjs` 专项测试搜索页。使用前安装：
+`scripts/smoke-test.mjs` 会用无头浏览器打开各个页面，验证渲染、接口数据与图片加载；`scripts/smoke-player.mjs` 专项测试播放页；`scripts/smoke-search.mjs` 专项测试搜索页；`scripts/smoke-songlist.mjs` 专项测试歌单详情页。使用前安装：
 
 ```bash
 npm i -D playwright
@@ -63,4 +63,5 @@ npx playwright install chromium
 node scripts/smoke-test.mjs
 node scripts/smoke-player.mjs
 node scripts/smoke-search.mjs
+node scripts/smoke-songlist.mjs
 ```
