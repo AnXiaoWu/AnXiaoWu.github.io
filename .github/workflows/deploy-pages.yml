@@ -1,11 +1,17 @@
 # 构建并部署到 GitHub Pages
-# 说明：本仓库是用户站点（<user>.github.io），Pages 源选择 master 分支的 /docs 目录。
-# 首次使用请到仓库 Settings -> Pages -> Source 选择 "master branch /docs folder"。
+# 说明：本仓库是用户站点（AnXiaoWu.github.io），Pages 源为 master 分支根目录，
+# 因此本工作流把构建产物（dist）直接提交到 master 根目录。
+# 使用 GITHUB_TOKEN 推送不会触发新的 workflow run，且产物无变化时跳过提交，不会循环。
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - 'assets/**' # 部署产物自身的变化不再触发
+      - 'index.html'
+      - 'favicon.ico'
+      - '.nojekyll'
   workflow_dispatch:
 
 permissions:
@@ -29,16 +35,16 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Prepare docs folder for Pages
+      - name: Publish dist to repository root
         run: |
-          rm -rf docs
-          cp -r dist docs
-          touch docs/.nojekyll
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: master
-          publish_dir: ./docs
-          keep_files: false
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp -r dist/. .
+          touch .nojekyll
+          git add -A
+          if git diff --staged --quiet; then
+            echo "产物无变化，跳过提交"
+          else
+            git commit -m "chore: deploy build output [skip ci]"
+            git push
+          fi

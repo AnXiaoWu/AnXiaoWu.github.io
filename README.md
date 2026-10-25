@@ -27,7 +27,7 @@ npm run preview    # 本地预览构建产物
 
 ## 部署
 
-推送到 `master` 分支会自动触发 GitHub Actions：构建后将 `dist` 发布为仓库根目录的 `docs` 文件夹（本仓库是用户站点，Pages 源需选择 `master / docs`）。
+推送到 `master` 分支会自动触发 GitHub Actions：构建 `dist` 并把产物提交回 master 根目录发布（本仓库是用户站点 `AnXiaoWu.github.io`，Pages 源为 master 根目录）。首次启用需到仓库 Settings → Pages → Source 选择 `master branch / (root)`。
 
 ## 目录结构
 
